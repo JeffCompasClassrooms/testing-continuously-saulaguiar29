@@ -1,6 +1,6 @@
 name: Test Orchestrator
 
-# Allows a “Run workflow” button in the Actions tab
+
 on:
   workflow_dispatch: {}
 
@@ -10,9 +10,77 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
- 
-      # ---- your tests go here ----
-      - name: Run test for repo 
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+      
+      - name: Install dependencies
         run: |
-          echo "Running tests..."
-          # replace this line with your actual test command(s)
+          python -m pip install --upgrade pip
+          pip install pytest pytest-describe requests behave behave-webdriver selenium
+
+      # ---- Unit Tests Repository ----
+      - name: Checkout Unit Tests Repository
+        uses: actions/checkout@v4
+        with:
+          repository: saulaguiar29/testing-with-doubles-saulaguiar29
+          path: unit-tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Run Unit Tests
+        working-directory: unit-tests
+        run: |
+          pytest test_mydb.py --spec -v
+
+      # ---- System Tests Repository ----
+      - name: Checkout System Tests Repository
+        uses: actions/checkout@v4
+        with:
+          repository: saulaguiar29/testing-systems-saulaguiar29
+          path: system-tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Database Template
+        working-directory: system-tests
+        run: |
+          python setup_db.py
+      
+      - name: Run System Tests
+        working-directory: system-tests
+        run: |
+          pytest test_squirrel_server.py --spec -v
+
+      # ---- Behave Tests Repository ----
+      - name: Checkout Behave Tests Repository
+        uses: actions/checkout@v4
+        with:
+          repository: saulaguiar/testing-with-behave-saulaguiar29
+          path: behave-tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Run isitchristmas Behave tests
+        working-directory: behave-tests/isitchristmas
+        run: |
+          python -m behave --format pretty --no-capture
+      
+      - name: Run peppers-ghost Behave tests
+        working-directory: behave-tests/peppers-ghost
+        run: |
+          python -m behave --format pretty --no-capture
+      
+      - name: Run basic-calculator Behave tests
+        working-directory: behave-tests/basic-calculator
+        run: |
+          python -m behave --format pretty --no-capture
+      
+      - name: Run advanced-humblebundle Behave tests
+        working-directory: behave-tests/advanced-humblebundle
+        run: |
+          python -m behave --format pretty --no-capture
