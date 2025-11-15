@@ -46,7 +46,7 @@ jobs:
       - name: Checkout System Tests Repository
         uses: actions/checkout@v4
         with:
-          repository: saulaguiar29/testing-systems-saulaguiar29
+          repository: JeffCompasClassrooms/testing-systems-saulaguiar29
           path: system-tests
           token: ${{ secrets.GITHUB_TOKEN }}
       
@@ -64,7 +64,7 @@ jobs:
       - name: Checkout Behave Tests Repository
         uses: actions/checkout@v4
         with:
-          repository: saulaguiar29/testing-with-behave-saulaguiar29
+          repository: JeffCompasClassrooms/testing-with-behave-saulaguiar29
           path: behave-tests
           token: ${{ secrets.GITHUB_TOKEN }}
       
