@@ -1,6 +1,5 @@
 name: Test Orchestrator
 
-
 on:
   workflow_dispatch: {}
 
@@ -24,7 +23,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-describe requests behave behave-webdriver selenium
+          # Unit and System test dependencies
+          pip install pytest pytest-spec pytest-describe pytest-mock requests
+          # Behave dependencies - pin urllib3 to avoid timeout bug
+          pip install "urllib3<2"
+          pip install behave==1.2.6 behave-webdriver selenium==3.141.0
 
       # ---- Unit Tests Repository ----
       - name: Checkout Unit Tests Repository
@@ -83,4 +86,6 @@ jobs:
       - name: Run advanced-humblebundle Behave tests
         working-directory: behave-tests/advanced-humblebundle
         run: |
+          # Install Selenium 4 for this specific test suite
+          pip install --upgrade selenium
           python -m behave --format pretty --no-capture
