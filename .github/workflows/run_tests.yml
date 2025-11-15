@@ -64,7 +64,7 @@ jobs:
       - name: Checkout Behave Tests Repository
         uses: actions/checkout@v4
         with:
-          repository: saulaguiar/testing-with-behave-saulaguiar29
+          repository: saulaguiar29/testing-with-behave-saulaguiar29
           path: behave-tests
           token: ${{ secrets.GITHUB_TOKEN }}
       
