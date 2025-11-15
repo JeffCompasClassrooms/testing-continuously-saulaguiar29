@@ -33,7 +33,7 @@ jobs:
       - name: Checkout Unit Tests Repository
         uses: actions/checkout@v4
         with:
-          repository: saulaguiar29/testing-with-doubles-saulaguiar29
+          repository: JeffCompasClassrooms/testing-with-doubles-saulaguiar29
           path: unit-tests
           token: ${{ secrets.GITHUB_TOKEN }}
       
